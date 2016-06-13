@@ -52,16 +52,18 @@ var scheduleCmd = &cobra.Command{
 		}
 
 		table := tablewriter.NewWriter(os.Stdout)
-		table.SetHeader([]string{"Home Team", "  ", "  ", "Away Team", "Status"})
+		table.SetHeader([]string{"Home Team", "  ", "  ", "Away Team", "Status", "Date"})
 
 		for _, f := range s.Fixtures {
-			table.Append([]string{
+			data := []string{
 				f.HomeTeam,
 				fmt.Sprintf("%d", f.Result.GoalsHome),
 				fmt.Sprintf("%d", f.Result.GoalsAway),
 				f.AwayTeam,
 				f.Status,
-			})
+				f.Date.Format("Jan _2 15:04"),
+			}
+			table.Append(data)
 		}
 
 		table.Render()
