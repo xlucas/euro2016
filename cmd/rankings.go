@@ -95,15 +95,15 @@ func getGroups() (map[string][]TeamRank, error) {
 }
 
 func printHeader(table *tablewriter.Table) {
-	table.SetHeader([]string{"Group", "Team", "POS", "P", "GF", "GA", "GD", "PTS"})
+	table.SetHeader([]string{"Group", "POS", "Team", "P", "GF", "GA", "GD", "PTS"})
 }
 
 func printGroup(table *tablewriter.Table, name string, ranks []TeamRank, last bool) {
 	for _, rank := range ranks {
 		table.Append([]string{
 			rank.Group,
-			rank.Team,
 			fmt.Sprintf("%d", rank.Rank),
+			rank.Team,
 			fmt.Sprintf("%d", rank.Played),
 			fmt.Sprintf("%d", rank.GoalsFor),
 			fmt.Sprintf("%d", rank.GoalsAgainst),

@@ -30,6 +30,7 @@ type Result struct {
 func init() {
 	RootCmd.AddCommand(scheduleCmd)
 	scheduleCmd.AddCommand(fullScheduleCmd)
+	scheduleCmd.AddCommand(statusScheduleCmd)
 	scheduleCmd.AddCommand(todayScheduleCmd)
 }
 
@@ -46,7 +47,7 @@ var fullScheduleCmd = &cobra.Command{
 			start, _ = time.Parse(time.RFC3339, "2016-06-10T00:00:00Z")
 			end, _   = time.Parse(time.RFC3339, "2016-07-11T00:00:00Z")
 		)
-		return showFixtures(start, end)
+		return showFixtures(start, end, "")
 	},
 }
 
@@ -60,12 +61,27 @@ var todayScheduleCmd = &cobra.Command{
 			start, _ = time.Parse(time.RFC3339, fmt.Sprintf("%d-%02d-%02dT00:00:00Z", now.Year(), now.Month(), now.Day()))
 			end, _   = time.Parse(time.RFC3339, fmt.Sprintf("%d-%02d-%02dT00:00:00Z", nextDay.Year(), nextDay.Month(), nextDay.Day()))
 		)
-		return showFixtures(start, end)
+		return showFixtures(start, end, "")
 	},
 }
 
-func showFixtures(start, end time.Time) error {
-	f, err := getFixtures(start, end)
+var statusScheduleCmd = &cobra.Command{
+	Use:   "status [FINISHED|IN_PLAY|TIMED]",
+	Short: "Print schedule for games with a specific status",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		var (
+			start, _ = time.Parse(time.RFC3339, "2016-06-10T00:00:00Z")
+			end, _   = time.Parse(time.RFC3339, "2016-07-11T00:00:00Z")
+		)
+		if len(args) != 1 {
+			return fmt.Errorf("Expecting game state as argument")
+		}
+		return showFixtures(start, end, args[0])
+	},
+}
+
+func showFixtures(start, end time.Time, status string) error {
+	f, err := getFixtures(start, end, status)
 	if err != nil {
 		return err
 	}
@@ -74,7 +90,7 @@ func showFixtures(start, end time.Time) error {
 	return nil
 }
 
-func getFixtures(from, to time.Time) ([]Fixture, error) {
+func getFixtures(from, to time.Time, status string) ([]Fixture, error) {
 	var (
 		schedule Schedule
 		fixtures []Fixture
@@ -87,7 +103,9 @@ func getFixtures(from, to time.Time) ([]Fixture, error) {
 
 	for _, f := range schedule.Fixtures {
 		if !f.Date.After(to) && !f.Date.Before(from) {
-			fixtures = append(fixtures, f)
+			if f.Status == status || status == "" {
+				fixtures = append(fixtures, f)
+			}
 		}
 	}
 

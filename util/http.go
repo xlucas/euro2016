@@ -56,6 +56,10 @@ func (c *JSONClient) execute(req *http.Request, output interface{}) error {
 
 	defer resp.Body.Close()
 
+	if resp.StatusCode == 429 {
+		return fmt.Errorf("You've reached the daily limit of 50 calls to the API." +
+			" Register a free account to overcome this limit")
+	}
 	if resp.StatusCode != 200 {
 		return fmt.Errorf("Unexpected server reply : %s", resp.Status)
 	}

@@ -9,12 +9,7 @@ import (
 )
 
 func main() {
-	err := util.LoadConfig()
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(-1)
-	}
-
+	util.LoadConfig()
 	cmd.Initialize()
 
 	if err := cmd.RootCmd.Execute(); err != nil {
