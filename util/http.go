@@ -27,9 +27,6 @@ func (c *JSONClient) Get(uri string, output interface{}) error {
 		return err
 	}
 
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("X-Auth-Token", c.authToken)
-
 	return c.execute(req, output)
 }
 

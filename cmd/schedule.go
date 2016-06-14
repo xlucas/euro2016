@@ -7,11 +7,6 @@ import (
 
 	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
-	"github.com/xlucas/euro2016/util"
-)
-
-const (
-	endpoint = "http://api.football-data.org/v1/soccerseasons/424"
 )
 
 type Schedule struct {
@@ -70,11 +65,7 @@ var todayScheduleCmd = &cobra.Command{
 }
 
 func showFixtures(start, end time.Time) error {
-	var (
-		c = util.NewJSONClient(endpoint, "")
-	)
-
-	f, err := getFixtures(c, start, end)
+	f, err := getFixtures(start, end)
 	if err != nil {
 		return err
 	}
@@ -83,18 +74,18 @@ func showFixtures(start, end time.Time) error {
 	return nil
 }
 
-func getFixtures(c *util.JSONClient, from, to time.Time) ([]Fixture, error) {
+func getFixtures(from, to time.Time) ([]Fixture, error) {
 	var (
-		s        Schedule
+		schedule Schedule
 		fixtures []Fixture
 	)
 
-	err := c.Get("/fixtures", &s)
+	err := client.Get("/fixtures", &schedule)
 	if err != nil {
 		return nil, err
 	}
 
-	for _, f := range s.Fixtures {
+	for _, f := range schedule.Fixtures {
 		if !f.Date.After(to) && !f.Date.Before(from) {
 			fixtures = append(fixtures, f)
 		}
@@ -105,13 +96,12 @@ func getFixtures(c *util.JSONClient, from, to time.Time) ([]Fixture, error) {
 
 func printFixtures(fixtures []Fixture, out *os.File) {
 	table := tablewriter.NewWriter(out)
-	table.SetHeader([]string{"Home Team", "  ", "  ", "Away Team", "Status", "Date"})
+	table.SetHeader([]string{"Home Team", "Score", "Away Team", "Status", "Date"})
 
 	for _, f := range fixtures {
 		data := []string{
 			f.HomeTeam,
-			fmt.Sprintf("%d", f.Result.GoalsHome),
-			fmt.Sprintf("%d", f.Result.GoalsAway),
+			fmt.Sprintf("%d - %d", f.Result.GoalsHome, f.Result.GoalsAway),
 			f.AwayTeam,
 			f.Status,
 			f.Date.Format(time.RFC822),
