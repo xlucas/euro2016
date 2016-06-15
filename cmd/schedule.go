@@ -114,10 +114,11 @@ func getFixtures(from, to time.Time, status string) ([]Fixture, error) {
 
 func printFixtures(fixtures []Fixture, out *os.File) {
 	table := tablewriter.NewWriter(out)
-	table.SetHeader([]string{"Home Team", "Score", "Away Team", "Status", "Date"})
+	table.SetHeader([]string{"Day", "Home Team", "Score", "Away Team", "Status", "Date"})
 
 	for _, f := range fixtures {
 		data := []string{
+			fmt.Sprintf("%d", f.Matchday),
 			f.HomeTeam,
 			fmt.Sprintf("%d - %d", f.Result.GoalsHome, f.Result.GoalsAway),
 			f.AwayTeam,
