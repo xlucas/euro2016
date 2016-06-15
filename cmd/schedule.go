@@ -7,6 +7,7 @@ import (
 
 	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
+	"github.com/xlucas/euro2016/util"
 )
 
 type Schedule struct {
@@ -117,11 +118,19 @@ func printFixtures(fixtures []Fixture, out *os.File) {
 	table.SetHeader([]string{"Day", "Home Team", "Score", "Away Team", "Status", "Date"})
 
 	for _, f := range fixtures {
+		var (
+			homeTeam = f.HomeTeam
+			awayTeam = f.AwayTeam
+		)
+		if showEmoji {
+			homeTeam = fmt.Sprintf("%s %s", util.Flags[f.HomeTeam], f.HomeTeam)
+			awayTeam = fmt.Sprintf("%s %s", util.Flags[f.AwayTeam], f.AwayTeam)
+		}
 		data := []string{
 			fmt.Sprintf("%d", f.Matchday),
-			f.HomeTeam,
+			homeTeam,
 			fmt.Sprintf("%d - %d", f.Result.GoalsHome, f.Result.GoalsAway),
-			f.AwayTeam,
+			awayTeam,
 			f.Status,
 			f.Date.Format(time.RFC822),
 		}

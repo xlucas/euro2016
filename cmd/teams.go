@@ -1,11 +1,13 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 	"sort"
 
 	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
+	"github.com/xlucas/euro2016/util"
 )
 
 func init() {
@@ -44,7 +46,13 @@ var teamsCmd = &cobra.Command{
 		sort.Strings(names)
 
 		for _, name := range names {
-			table.Append([]string{name})
+			var (
+				team = name
+			)
+			if showEmoji {
+				team = fmt.Sprintf("%s %s", util.Flags[name], team)
+			}
+			table.Append([]string{team})
 		}
 
 		table.Render()

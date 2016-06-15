@@ -5,6 +5,7 @@ import "github.com/spf13/viper"
 func LoadConfig() error {
 	// Default
 	viper.SetDefault("token", "")
+	viper.SetDefault("emoji", false)
 
 	// Config path
 	viper.AddConfigPath("$HOME")

@@ -1,0 +1,28 @@
+package util
+
+var Flags = map[string]string{
+	"Albania":             "🇦🇱",
+	"Austria":             "🇦🇹",
+	"Belgium":             "🇧🇪",
+	"Croatia":             "🇭🇷",
+	"Czech Republic":      "🇨🇿",
+	"England":             "🇬🇧",
+	"France":              "🇫🇷",
+	"Germany":             "🇩🇪",
+	"Hungary":             "🇭🇺",
+	"Iceland":             "🇮🇸",
+	"Italy":               "🇮🇹",
+	"Northern Ireland":    "🇬🇧",
+	"Poland":              "🇵🇱",
+	"Portugal":            "🇵🇹",
+	"Republic of Ireland": "🇮🇪",
+	"Romania":             "🇷🇴",
+	"Russia":              "🇷🇺",
+	"Slovakia":            "🇸🇰",
+	"Spain":               "🇪🇸",
+	"Sweden":              "🇸🇪",
+	"Switzerland":         "🇨🇭",
+	"Turkey":              "🇹🇷",
+	"Ukraine":             "🇺🇦",
+	"Wales":               "🇬🇧",
+}

@@ -7,6 +7,7 @@ import (
 
 	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
+	"github.com/xlucas/euro2016/util"
 )
 
 type League struct {
@@ -100,10 +101,16 @@ func printHeader(table *tablewriter.Table) {
 
 func printGroup(table *tablewriter.Table, name string, ranks []TeamRank, last bool) {
 	for _, rank := range ranks {
+		var (
+			team = rank.Team
+		)
+		if showEmoji {
+			team = fmt.Sprintf("%s %s", util.Flags[rank.Team], rank.Team)
+		}
 		table.Append([]string{
 			rank.Group,
 			fmt.Sprintf("%d", rank.Rank),
-			rank.Team,
+			team,
 			fmt.Sprintf("%d", rank.Played),
 			fmt.Sprintf("%d", rank.GoalsFor),
 			fmt.Sprintf("%d", rank.GoalsAgainst),

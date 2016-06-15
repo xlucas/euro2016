@@ -6,9 +6,11 @@ import (
 )
 
 var (
-	client *util.JSONClient
+	client    *util.JSONClient
+	showEmoji bool
 )
 
 func Initialize() {
 	client = util.NewJSONClient(endpoint, viper.GetString("token"))
+	showEmoji = viper.GetBool("emoji")
 }
